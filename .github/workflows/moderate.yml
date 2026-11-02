@@ -2,9 +2,9 @@ name: Padlet AI Moderator
 
 on:
   schedule:
-    # 例：30分おめに自動実行する場合
+    # 例：30分おきに自動実行する場合
     - cron: '*/30 * * * *'
-  workflow_dispatch: # 手動でも実行できるようにする
+  workflow_dispatch: # GitHubの画面から手動でも実行できるようにする
 
 jobs:
   moderate:
