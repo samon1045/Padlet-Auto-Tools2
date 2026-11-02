@@ -1,0 +1,32 @@
+name: Padlet AI Moderator
+
+on:
+  schedule:
+    # 例：30分おめに自動実行する場合
+    - cron: '*/30 * * * *'
+  workflow_dispatch: # 手動でも実行できるようにする
+
+jobs:
+  moderate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run Moderator Bot
+        env:
+          TARGET_URL: ${{ secrets.TARGET_URL }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          AUTH_JSON: ${{ secrets.AUTH_JSON }}
+        run: node moderator.js
