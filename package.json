@@ -1,10 +1,10 @@
 {
-  "name": "padlet-ai-moderator-bot",
+  "name": "padlet-ai-moderator",
   "version": "1.0.0",
-  "description": "PlaywrightとGemini APIを活用したPadlet自動投稿＆自動モデレーションBOT",
-  "main": "bot.js",
+  "description": "PlaywrightとGemini APIを活用したPadlet自動モデレーションBOT",
+  "main": "moderator.js",
   "scripts": {
-    "start": "node bot.js"
+    "start": "node moderator.js"
   },
   "keywords": [
     "playwright",
