@@ -1,0 +1,22 @@
+{
+  "name": "padlet-ai-moderator-bot",
+  "version": "1.0.0",
+  "description": "PlaywrightとGemini APIを活用したPadlet自動投稿＆自動モデレーションBOT",
+  "main": "bot.js",
+  "scripts": {
+    "start": "node bot.js"
+  },
+  "keywords": [
+    "playwright",
+    "gemini-api",
+    "padlet",
+    "automation",
+    "moderation"
+  ],
+  "author": "みかん",
+  "license": "ISC",
+  "dependencies": {
+    "@google/genai": "^0.1.1",
+    "playwright": "^1.40.0"
+  }
+}
