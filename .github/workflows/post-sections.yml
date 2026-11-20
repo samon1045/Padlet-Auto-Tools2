@@ -1,0 +1,68 @@
+name: Create Section and Post to Server
+
+on:
+  workflow_dispatch:
+    inputs:
+      server_id:
+        description: '対象サーバーID'
+        required: true
+        type: string
+      section_name:
+        description: '作成するセクション名'
+        required: true
+        type: string
+      message:
+        description: '投稿メッセージ'
+        required: true
+        type: string
+      image_path:
+        description: 'リポジトリ内の画像パス（例: assets/post.png）'
+        required: true
+        default: 'assets/post.png'
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Write cookies from secret to temp file
+        env:
+          COOKIES_JSON: ${{ secrets.ACCOUNT_COOKIES_JSON }}
+        run: |
+          if [ -z "$COOKIES_JSON" ]; then
+            echo "ACCOUNT_COOKIES_JSON secret is empty"
+            exit 1
+          fi
+          printf '%s' "$COOKIES_JSON" > /tmp/cookies.json
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Run section creation and posting script
+        env:
+          BASE_URL: ${{ vars.BOT_WEB_URL }}
+          COOKIES_FILE: /tmp/cookies.json
+          SERVER_ID: ${{ github.event.inputs.server_id }}
+          SECTION_NAME: ${{ github.event.inputs.section_name }}
+          MESSAGE_TEXT: ${{ github.event.inputs.message }}
+          IMAGE_PATH: ${{ github.event.inputs.image_path }}
+        run: node ./scripts/post_sections.mjs
+
+      - name: Clean up temporary cookies
+        if: always()
+        run: rm -f /tmp/cookies.json
